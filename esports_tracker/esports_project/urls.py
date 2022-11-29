@@ -1,21 +1,26 @@
-"""esports_project URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from rest_framework import routers
+from esports_app import views
+from esports_app.views import MatchViewSet, TeamViewSet
+
+
+router = routers.DefaultRouter()
+router.register(r'Match', views.MatchViewSet)
+router.register(r'Team', views.MatchViewSet)
+
+Match_list = MatchViewSet.as_view({
+    'get': 'list'
+})
+
+Team_list = TeamViewSet.as_view({
+    'get': 'list'
+})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('match', Match_list, name='Match-list'),
+    path('team', Team_list, name= 'Team-list'),
 ]
